@@ -3,14 +3,14 @@
 }
 
 body {
-  background-color: #f5f6fa;
+  background-color: #d5d7db;
 }
 
-.app {
+.app__main {
   display: flex;
   justify-content: space-evenly;
-  background-color: #f5f6fa;
-  padding: 20px;
+  background-color: #d5d7db;
+
 }
 
 .app__dropdown {
@@ -36,6 +36,12 @@ body {
 
 .app__left {
   flex: 0.9;
+  margin: 20px;
+  
+}
+.app__right{
+  height: fit-content;
+  margin: 20px;
 }
 
 .app__information > h3 {
@@ -48,9 +54,25 @@ body {
 .app__information > h3:last-of-type {
   margin-top: 1rem;
 }
+.app__CountryDetails {
+  
+  border-bottom: 1px solid lightgray;
+  margin-bottom: 10px;
+
+}
+
+.app__footer {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+.app__graph {
+  margin-top: 10px;
+}
 
 @media (max-width: 990px) {
-  .app {
+  .app__main {
     flex-direction: column;
   }
 }
+

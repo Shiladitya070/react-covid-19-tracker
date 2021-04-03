@@ -68,14 +68,14 @@ function LineGraph({ casesType }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
+      await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=220")
         .then((response) => {
           return response.json();
         })
         .then((data) => {
           let chartData = buildChartData(data, casesType);
           setData(chartData);
-          console.log(chartData);
+          // console.log(chartData);
           // buildChart(chartData);
         });
     };

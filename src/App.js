@@ -14,6 +14,7 @@ import { sortData, prettyPrintStat } from "./util";
 import numeral from "numeral";
 import Map from "./Map";
 import "leaflet/dist/leaflet.css";
+import CountryDetails from "./CountryDetails";
 
 const App = () => {
   const [country, setInputCountry] = useState("worldwide");
@@ -22,7 +23,7 @@ const App = () => {
   const [mapCountries, setMapCountries] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [casesType, setCasesType] = useState("cases");
-  const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
+  const [mapCenter, setMapCenter] = useState({ lat: 20.5937, lng: 78.9629 });
   const [mapZoom, setMapZoom] = useState(3);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const App = () => {
     getCountriesData();
   }, []);
 
-  console.log(casesType);
+  // console.log(casesType);
 
   const onCountryChange = async (e) => {
     const countryCode = e.target.value;
@@ -67,70 +68,91 @@ const App = () => {
         setInputCountry(countryCode);
         setCountryInfo(data);
         setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-        setMapZoom(4);
+        setMapZoom(5);
       });
   };
 
   return (
     <div className="app">
-      <div className="app__left">
-        <div className="app__header">
-          <h1>COVID-19 Tracker</h1>
-          <FormControl className="app__dropdown">
-            <Select
-              variant="outlined"
-              value={country}
-              onChange={onCountryChange}
-            >
-              <MenuItem value="worldwide">Worldwide</MenuItem>
-              {countries.map((country) => (
-                <MenuItem value={country.value}>{country.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-        <div className="app__stats">
-          <InfoBox
-            onClick={(e) => setCasesType("cases")}
-            title="Coronavirus Cases"
-            isRed
-            active={casesType === "cases"}
-            cases={prettyPrintStat(countryInfo.todayCases)}
-            total={numeral(countryInfo.cases).format("0.0a")}
-          />
-          <InfoBox
-            onClick={(e) => setCasesType("recovered")}
-            title="Recovered"
-            active={casesType === "recovered"}
-            cases={prettyPrintStat(countryInfo.todayRecovered)}
-            total={numeral(countryInfo.recovered).format("0.0a")}
-          />
-          <InfoBox
-            onClick={(e) => setCasesType("deaths")}
-            title="Deaths"
-            isRed
-            active={casesType === "deaths"}
-            cases={prettyPrintStat(countryInfo.todayDeaths)}
-            total={numeral(countryInfo.deaths).format("0.0a")}
-          />
-        </div>
-        <Map
-          countries={mapCountries}
-          casesType={casesType}
-          center={mapCenter}
-          zoom={mapZoom}
-        />
-      </div>
-      <Card className="app__right">
-        <CardContent>
-          <div className="app__information">
-            <h3>Live Cases by Country</h3>
-            <Table countries={tableData} />
-            <h3>Worldwide new {casesType}</h3>
-            <LineGraph casesType={casesType} />
+      <div className="app__main">
+        <div className="app__left">
+          <div className="app__header">
+            <h1>COVID-19 Tracker</h1>
+            <FormControl className="app__dropdown">
+              <Select
+                variant="outlined"
+                value={country}
+                onChange={onCountryChange}
+              >
+                <MenuItem value="worldwide">Worldwide</MenuItem>
+                {countries.map((country) => (
+                  <MenuItem value={country.value}>{country.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
-        </CardContent>
-      </Card>
+          <div className="app__stats">
+            <InfoBox
+              onClick={(e) => setCasesType("cases")}
+              title="Coronavirus Cases"
+              isRed
+              active={casesType === "cases"}
+              cases={prettyPrintStat(countryInfo.todayCases)}
+              total={numeral(countryInfo.cases).format("0.0a")}
+            />
+            <InfoBox
+              onClick={(e) => setCasesType("recovered")}
+              title="Recovered"
+              active={casesType === "recovered"}
+              cases={prettyPrintStat(countryInfo.todayRecovered)}
+              total={numeral(countryInfo.recovered).format("0.0a")}
+            />
+            <InfoBox
+              onClick={(e) => setCasesType("deaths")}
+              title="Deaths"
+              isRed
+              active={casesType === "deaths"}
+              cases={prettyPrintStat(countryInfo.todayDeaths)}
+              total={numeral(countryInfo.deaths).format("0.0a")}
+            />
+          </div>
+
+          <Map
+            countries={mapCountries}
+            casesType={casesType}
+            center={mapCenter}
+            zoom={mapZoom}
+          />
+          <Card className="app__graph">
+            <CardContent>
+              <h3>Worldwide new {casesType}</h3>
+              <LineGraph casesType={casesType} />
+            </CardContent>
+          </Card>
+        </div>
+        <Card className="app__right">
+          <CardContent>
+            <div className="app__information">
+              <div className="app__CountryDetails">
+                <h3><u>Details of {country}</u></h3>
+                <CountryDetails data={countryInfo} />
+              </div>
+
+              <h3>Live Cases by Country</h3>
+              <Table countries={tableData} />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="app__footer">
+        <p>
+          <small>
+            A project made by Shiladitya Das, Nikita sarkar, Rupayan Dutta ,
+            Priyanshu Das, Swapnaneel Sarkar for Jawaharlal Nehru National
+            Science, Mathematics and Environment Exhibition-2021
+          </small>
+        </p>
+      </div>
     </div>
   );
 };
